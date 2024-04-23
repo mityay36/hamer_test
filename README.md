@@ -32,7 +32,12 @@ Make your own .env file in main directory. All required variables are listed in 
 ### Congrats! Now you can access the application docs at [localhost](http://localhost:8000/api/docs)
 
 ### Examples of server responses:
+	http://127.0.0.1:8000/api/v1/auth/signup/
 
+ 	{
+	    "phone_number": "+79008007060",
+	    "confirmation_code": "1111"
+	}
 
 ## Author
 [Dmitry Pokrovsky](https://github.com/mityay36)
