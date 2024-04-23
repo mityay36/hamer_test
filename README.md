@@ -39,5 +39,26 @@ Make your own .env file in main directory. All required variables are listed in 
 	    "confirmation_code": "1111"
 	}
 
+
+ 	http://127.0.0.1:8000/api/v1/auth/token/
+
+  	{
+	    "token": "generated_token"
+	}
+
+
+	http://127.0.0.1:8000/api/v1/users/me
+
+	 {
+	    "phone_number": "+79060847800",
+	    "first_name": "",
+	    "last_name": "",
+	    "bio": "",
+	    "role": "user",
+	    "referral_code": "X3bfHa",
+	    "user_referrals": []
+	}
+
+
 ## Author
 [Dmitry Pokrovsky](https://github.com/mityay36)
