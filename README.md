@@ -1,4 +1,4 @@
-# Test task for longevity 
+# Test task for Hammer Systems 
 
 This project aims to provide a custom authentication system and referral logic.
 ## Technologies Used
@@ -29,7 +29,10 @@ Make your own .env file in main directory. All required variables are listed in 
 #### Perform your own superuser
     docker-compose -f docker-compose.yml exec backend python manage.py createsuperuser
 
-### Congrats! Now you can access the application at [localhost](http://localhost:8000)
+### Congrats! Now you can access the application docs at [localhost](http://localhost:8000/api/docs)
+
+### Examples of server responses:
+
 
 ## Author
 [Dmitry Pokrovsky](https://github.com/mityay36)
