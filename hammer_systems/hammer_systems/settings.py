@@ -1,19 +1,19 @@
 import os
+from datetime import timedelta
+from pathlib import Path
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from dotenv import load_dotenv
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+load_dotenv()
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6c1-_559z^@ym^!d#1!la5npbr(eo6$-vt&9hmzs+$r)-!6=+_'
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.getenv('DJANGO_SECRET')
 
-ALLOWED_HOSTS = []
+DEBUG = os.getenv('DEBUG_VALUE', default='False').lower() in ('true', '1', 't')
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOST', '127.0.0.1, ').split(', ')
 
 
 # Application definition
@@ -25,6 +25,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_swagger',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'phonenumber_field',
+    'phonenumbers',
+    'drf_yasg',
+    'api',
+    'users',
+
 ]
 
 MIDDLEWARE = [
@@ -58,19 +67,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'hammer_systems.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+# Database for local development
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+}'''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'django'),
+        'USER': os.getenv('POSTGRES_USER', 'django'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', 5432)
+    }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -88,12 +104,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.getenv('TIME_ZONE_VALUE', default='UTC')
 
 USE_I18N = True
 
@@ -102,7 +115,45 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'collected_static'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/media'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.User'
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'phone_number',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+}
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'core.custom_auth.AuthenticationWithoutPassword',
+)
