@@ -36,21 +36,28 @@ Make your own .env file in main directory. All required variables are listed in 
 Request URL:
 	http://127.0.0.1:8000/api/v1/auth/signup/
 Sample response:
+
  	{
 	    "phone_number": "+79008007060",
 	    "confirmation_code": "1111"
 	}
 
 Request URL:
+
  	http://127.0.0.1:8000/api/v1/auth/token/
+  
 Sample response:
+
   	{
 	    "token": "generated_token"
 	}
 
 Request URL:
+
 	http://127.0.0.1:8000/api/v1/users/me
+ 
 Sample response:
+
 	 {
 	    "phone_number": "+79060847800",
 	    "first_name": "",
