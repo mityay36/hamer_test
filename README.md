@@ -34,7 +34,9 @@ Make your own .env file in main directory. All required variables are listed in 
 ### Examples of server responses
 
 Request URL:
+
 	http://127.0.0.1:8000/api/v1/auth/signup/
+ 
 Sample response:
 
  	{
